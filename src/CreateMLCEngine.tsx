@@ -1,6 +1,6 @@
 import { CreateMLCEngine, MLCEngine } from "@mlc-ai/web-llm";
 
-const HF_TOKEN = import.meta.env.VITE_API_KEY; // Ersätt med din Hugging Face API-token
+const HF_TOKEN = import.meta.env.VITE_API_KEY; 
 const DEFAULT_MODEL = "meta-llama/Llama-3.2-3B-Instruct";
 
 const fetchModelConfig = async (modelName: string) => {
@@ -26,7 +26,7 @@ const fetchModelConfig = async (modelName: string) => {
 };
 
 export const initializeMLCEngine = async (
-    modelName: string = DEFAULT_MODEL,  // Om ingen modell anges, använd standardmodellen
+    modelName: string = DEFAULT_MODEL, 
     onProgress?: (progress: { progress: number; text: string }) => void
 ): Promise<MLCEngine | null> => {
     try {
@@ -34,20 +34,17 @@ export const initializeMLCEngine = async (
 
         console.log("Laddar modell:", correctedModelName);
 
-        // Kolla om modellen redan är laddad i sessionStorage
         if (sessionStorage.getItem("modelLoaded")) {
             console.log("Modell redan laddad, hoppar över.");
             return null;
         }
 
-        // Hämta modellkonfiguration via API-token
         const modelConfig = await fetchModelConfig(correctedModelName);
         if (!modelConfig) {
             console.error("Kunde inte hämta modellkonfiguration.");
             return null;
         }
 
-        // Konfigurera appConfig baserat på hämtad data
         const appConfig = {
             useIndexedDBCache: true,
             model_list: [
@@ -73,7 +70,6 @@ export const initializeMLCEngine = async (
 
         console.log("Modell laddad!");
 
-        // Spara status så att vi vet att modellen är laddad under sessionen
         sessionStorage.setItem("modelLoaded", "true");
 
         return mlcEngine;
